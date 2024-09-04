@@ -19,12 +19,12 @@ from typing import Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
-from flashinfer.norm import (
-    fused_add_rmsnorm,
-    gemma_fused_add_rmsnorm,
-    gemma_rmsnorm,
-    rmsnorm,
-)
+# from flashinfer.norm import (
+#     fused_add_rmsnorm,
+#     gemma_fused_add_rmsnorm,
+#     gemma_rmsnorm,
+#     rmsnorm,
+# )
 from vllm.model_executor.custom_op import CustomOp
 
 

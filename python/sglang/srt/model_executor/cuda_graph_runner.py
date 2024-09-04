@@ -20,8 +20,8 @@ from contextlib import contextmanager
 from typing import Callable, List
 
 import torch
-from flashinfer import BatchDecodeWithPagedKVCacheWrapper
-from flashinfer.decode import _grouped_size_compiled_for_decode_kernels
+# from flashinfer import BatchDecodeWithPagedKVCacheWrapper
+# from flashinfer.decode import _grouped_size_compiled_for_decode_kernels
 from vllm.distributed.parallel_state import graph_capture
 from vllm.model_executor.custom_op import CustomOp
 

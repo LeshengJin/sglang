@@ -18,7 +18,7 @@ from typing import Optional
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from flashinfer.activation import gelu_and_mul, gelu_tanh_and_mul, silu_and_mul
+# from flashinfer.activation import gelu_and_mul, gelu_tanh_and_mul, silu_and_mul
 from vllm.distributed import (
     divide,
     get_tensor_model_parallel_rank,

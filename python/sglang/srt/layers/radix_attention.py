@@ -18,7 +18,7 @@ limitations under the License.
 from typing import Optional
 
 import torch
-from flashinfer.cascade import merge_state
+# from flashinfer.cascade import merge_state
 from torch import nn
 
 from sglang.global_config import global_config

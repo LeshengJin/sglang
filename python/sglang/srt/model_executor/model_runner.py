@@ -25,12 +25,12 @@ from typing import Optional, Tuple, Type
 
 import torch
 import torch.nn as nn
-from flashinfer import (
-    BatchDecodeWithPagedKVCacheWrapper,
-    BatchPrefillWithPagedKVCacheWrapper,
-    BatchPrefillWithRaggedKVCacheWrapper,
-)
-from flashinfer.decode import _grouped_size_compiled_for_decode_kernels
+# from flashinfer import (
+#     BatchDecodeWithPagedKVCacheWrapper,
+#     BatchPrefillWithPagedKVCacheWrapper,
+#     BatchPrefillWithRaggedKVCacheWrapper,
+# )
+# from flashinfer.decode import _grouped_size_compiled_for_decode_kernels
 from vllm.config import DeviceConfig, LoadConfig
 from vllm.config import ModelConfig as VllmModelConfig
 from vllm.distributed import (
@@ -165,13 +165,14 @@ class ModelRunner:
         logger.info(
             f"Load weight begin. avail mem={get_available_gpu_memory(self.gpu_id):.2f} GB"
         )
-        if torch.cuda.get_device_capability()[0] < 8:
-            logger.info(
-                "Compute capability below sm80. Use float16 due to lack of bfloat16 support."
-            )
-            self.server_args.dtype = "float16"
-            if torch.cuda.get_device_capability()[1] < 5:
-                raise RuntimeError("SGLang only supports sm75 and above.")
+        # if torch.cuda.get_device_capability()[0] < 8:
+        #     logger.info(
+        #         "Compute capability below sm80. Use float16 due to lack of bfloat16 support."
+        #     )
+        #     self.server_args.dtype = "float16"
+        #     if torch.cuda.get_device_capability()[1] < 5:
+        #         raise RuntimeError("SGLang only supports sm75 and above.")
+        self.server_args.dtype = "float16"
 
         monkey_patch_vllm_dummy_weight_loader()
         self.device_config = DeviceConfig()

@@ -3,12 +3,12 @@ import logging
 from typing import Union
 
 import torch
-from flashinfer.sampling import (
-    min_p_sampling_from_probs,
-    top_k_renorm_prob,
-    top_k_top_p_sampling_from_probs,
-    top_p_renorm_prob,
-)
+# from flashinfer.sampling import (
+#     min_p_sampling_from_probs,
+#     top_k_renorm_prob,
+#     top_k_top_p_sampling_from_probs,
+#     top_p_renorm_prob,
+# )
 from vllm.model_executor.custom_op import CustomOp
 
 from sglang.srt.layers.logits_processor import LogitsProcessorOutput
@@ -126,6 +126,7 @@ def top_k_top_p_min_p_sampling_from_probs_torch(
     min_ps: torch.Tensor,
 ):
     """A top-k, top-p and min-p sampling implementation with native pytorch operations."""
+    probs = probs[:, -1, :]
     probs_sort, probs_idx = probs.sort(dim=-1, descending=True)
     probs_sum = torch.cumsum(probs_sort, dim=-1)
     min_p_thresholds = probs_sort[:, 0] * min_ps
