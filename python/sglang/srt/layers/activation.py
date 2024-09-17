@@ -19,7 +19,6 @@ from typing import Optional
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from flashinfer.activation import gelu_and_mul, gelu_tanh_and_mul, silu_and_mul
 from vllm.distributed import (
     divide,
     get_tensor_model_parallel_rank,
@@ -30,6 +29,8 @@ from vllm.model_executor.layers.quantization import QuantizationConfig
 from vllm.model_executor.utils import set_weight_attrs
 
 from sglang.srt.utils import is_hip
+if not is_hip():
+    from flashinfer.activation import gelu_and_mul, gelu_tanh_and_mul, silu_and_mul
 
 logger = logging.getLogger(__name__)
 
