@@ -694,10 +694,13 @@ def v1_generate_response(request, ret, tokenizer_manager, to_file=False):
     return response
 
 
-async def v1_completions(tokenizer_manager, raw_request: Request):
+async def v1_completions(
+    tokenizer_manager, raw_request: Request, extra_sampling_params
+):
     request_json = await raw_request.json()
     all_requests = [CompletionRequest(**request_json)]
     adapted_request, request = v1_generate_request(all_requests)
+    adapted_request.sampling_params.update(extra_sampling_params)
 
     if adapted_request.stream:
 
@@ -1166,10 +1169,13 @@ def v1_chat_generate_response(request, ret, to_file=False, cache_report=False):
         return response
 
 
-async def v1_chat_completions(tokenizer_manager, raw_request: Request):
+async def v1_chat_completions(
+    tokenizer_manager, raw_request: Request, extra_sampling_params
+):
     request_json = await raw_request.json()
     all_requests = [ChatCompletionRequest(**request_json)]
     adapted_request, request = v1_chat_generate_request(all_requests, tokenizer_manager)
+    adapted_request.sampling_params.update(extra_sampling_params)
 
     if adapted_request.stream:
 
