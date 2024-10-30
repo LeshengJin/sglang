@@ -401,6 +401,10 @@ def launch_engine(
         scheduler_pipe_readers[i].recv()
 
 
+def get_tokenizer_manager():
+    return tokenizer_manager
+
+
 def launch_server(
     server_args: ServerArgs,
     pipe_finish_writer: Optional[mp.connection.Connection] = None,
