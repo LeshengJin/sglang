@@ -511,6 +511,10 @@ def launch_engine(
     scheduler_info = scheduler_infos[0]
 
 
+def get_tokenizer_manager():
+    return tokenizer_manager
+
+
 def launch_server(
     server_args: ServerArgs,
     pipe_finish_writer: Optional[mp.connection.Connection] = None,
