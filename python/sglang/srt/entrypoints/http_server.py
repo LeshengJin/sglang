@@ -107,6 +107,10 @@ def set_global_state(global_state: _GlobalState):
     _global_state = global_state
 
 
+def get_global_state():
+    return _global_state
+
+
 ##### Native API endpoints #####
 
 
