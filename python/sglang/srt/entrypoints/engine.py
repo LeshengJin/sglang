@@ -337,7 +337,7 @@ def _set_envs_and_config(server_args: ServerArgs):
     mp.set_start_method("spawn", force=True)
 
 
-def _launch_subprocesses(server_args: ServerArgs) -> Tuple[TokenizerManager, Dict]:
+def _launch_subprocesses(server_args: ServerArgs, status_array) -> Tuple[TokenizerManager, Dict]:
     """
     Launch the TokenizerManager in the main process, the Scheduler in a subprocess, and the DetokenizerManager in another subprocess.
     """
@@ -373,7 +373,7 @@ def _launch_subprocesses(server_args: ServerArgs) -> Tuple[TokenizerManager, Dic
             gpu_id = server_args.base_gpu_id + tp_rank % tp_size_per_node
             proc = mp.Process(
                 target=run_scheduler_process,
-                args=(server_args, port_args, gpu_id, tp_rank, None, writer),
+                args=(server_args, port_args, gpu_id, tp_rank, None, writer, status_array),
             )
             with memory_saver_adapter.configure_subprocess():
                 proc.start()

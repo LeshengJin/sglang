@@ -458,7 +458,7 @@ class Scheduler:
         self.parent_process.send_signal(signal.SIGQUIT)
 
     @torch.no_grad()
-    def event_loop_normal(self):
+    def event_loop_normal(self, status_array):
         """A normal scheduler loop."""
         while True:
             recv_reqs = self.recv_requests()
@@ -477,8 +477,11 @@ class Scheduler:
 
             self.last_batch = batch
 
+            status_array[0] = self.stats.num_running_reqs
+            status_array[1] = self.stats.num_queue_reqs
+
     @torch.no_grad()
-    def event_loop_overlap(self):
+    def event_loop_overlap(self, status_array):
         """A scheduler loop that overlaps the CPU processing and GPU computation."""
         result_queue = deque()
 
@@ -516,6 +519,9 @@ class Scheduler:
                 self.new_token_ratio = self.init_new_token_ratio
 
             self.last_batch = batch
+
+            status_array[0] = self.stats.num_running_reqs
+            status_array[1] = self.stats.num_queue_reqs
 
     def recv_requests(self) -> List[Req]:
         """Receive results at tp_rank = 0 and broadcast it to all other TP ranks."""
@@ -1730,6 +1736,7 @@ def run_scheduler_process(
     tp_rank: int,
     dp_rank: Optional[int],
     pipe_writer,
+    status_array,
 ):
     setproctitle.setproctitle("sglang::scheduler")
     faulthandler.enable()
@@ -1762,9 +1769,9 @@ def run_scheduler_process(
             }
         )
         if scheduler.enable_overlap:
-            scheduler.event_loop_overlap()
+            scheduler.event_loop_overlap(status_array)
         else:
-            scheduler.event_loop_normal()
+            scheduler.event_loop_normal(status_array)
     except Exception:
         traceback = get_exception_traceback()
         logger.error(f"Scheduler hit an exception: {traceback}")
