@@ -827,7 +827,7 @@ class Scheduler(
             status_array[1] = self.stats.num_queue_reqs
 
     @DynamicGradMode()
-    def event_loop_overlap(self):
+    def event_loop_overlap(self, status_array):
         """A scheduler loop that overlaps the CPU processing and GPU computation."""
         self.result_queue = deque()
 
@@ -868,6 +868,9 @@ class Scheduler(
                 self.self_check_during_idle()
 
             self.last_batch = batch
+
+            status_array[0] = self.stats.num_running_reqs
+            status_array[1] = self.stats.num_queue_reqs
 
     @DynamicGradMode()
     def event_loop_pp(self):
@@ -2611,7 +2614,7 @@ def run_scheduler_process(
             if server_args.pp_size > 1:
                 scheduler.event_loop_pp()
             elif scheduler.enable_overlap:
-                scheduler.event_loop_overlap()
+                scheduler.event_loop_overlap(status_array)
             else:
                 scheduler.event_loop_normal(status_array)
         elif disaggregation_mode == DisaggregationMode.PREFILL:
