@@ -531,7 +531,7 @@ class OpenAIServingChat(OpenAIServingBase):
                     if reasoning_text:
                         choice_data = ChatCompletionResponseStreamChoice(
                             index=index,
-                            delta=DeltaMessage(reasoning_content=reasoning_text),
+                            delta=DeltaMessage(role="assistant", reasoning_content=reasoning_text),
                             finish_reason=None,
                         )
                         chunk = ChatCompletionStreamResponse(
@@ -573,7 +573,7 @@ class OpenAIServingChat(OpenAIServingBase):
                     if delta:
                         choice_data = ChatCompletionResponseStreamChoice(
                             index=index,
-                            delta=DeltaMessage(content=delta),
+                            delta=DeltaMessage(role="assistant", content=delta),
                             finish_reason=None,
                             matched_stop=None,
                             logprobs=choice_logprobs,
