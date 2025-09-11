@@ -805,7 +805,7 @@ class Scheduler(
             initialize_moe_config(self.server_args)
 
     @DynamicGradMode()
-    def event_loop_normal(self):
+    def event_loop_normal(self, status_array):
         """A normal scheduler loop."""
         while True:
             recv_reqs = self.recv_requests()
@@ -822,6 +822,9 @@ class Scheduler(
                 self.self_check_during_idle()
 
             self.last_batch = batch
+
+            status_array[0] = self.stats.num_running_reqs
+            status_array[1] = self.stats.num_queue_reqs
 
     @DynamicGradMode()
     def event_loop_overlap(self):
@@ -2548,6 +2551,7 @@ def run_scheduler_process(
     pp_rank: int,
     dp_rank: Optional[int],
     pipe_writer,
+    status_array,
     balance_meta: Optional[DPBalanceMeta] = None,
 ):
     if (numa_node := server_args.numa_node) is not None:
@@ -2609,7 +2613,7 @@ def run_scheduler_process(
             elif scheduler.enable_overlap:
                 scheduler.event_loop_overlap()
             else:
-                scheduler.event_loop_normal()
+                scheduler.event_loop_normal(status_array)
         elif disaggregation_mode == DisaggregationMode.PREFILL:
             if scheduler.enable_overlap:
                 scheduler.event_loop_overlap_disagg_prefill()
