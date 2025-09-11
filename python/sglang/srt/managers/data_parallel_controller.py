@@ -190,6 +190,7 @@ class DataParallelController:
         port_args: PortArgs,
         base_gpu_id: int,
         dp_rank: int,
+        status_array,
     ):
         if not server_args.enable_dp_attention:
             logger.info(f"Launch DP{dp_rank} starting at GPU #{base_gpu_id}.")
@@ -250,6 +251,7 @@ class DataParallelController:
                         pp_rank,
                         dp_rank,
                         writer,
+                        status_array,
                         self.balance_meta,
                     ),
                 )
