@@ -823,8 +823,10 @@ class Scheduler(
 
             self.last_batch = batch
 
-            status_array[0] = self.stats.num_running_reqs
-            status_array[1] = self.stats.num_queue_reqs
+            if self.stats.num_running_reqs > 0:
+                status_array[0] = self.stats.num_running_reqs
+            if self.stats.num_queue_reqs > 0:
+                status_array[1] = self.stats.num_queue_reqs
 
     @DynamicGradMode()
     def event_loop_overlap(self, status_array):
@@ -869,8 +871,10 @@ class Scheduler(
 
             self.last_batch = batch
 
-            status_array[0] = self.stats.num_running_reqs
-            status_array[1] = self.stats.num_queue_reqs
+            if self.stats.num_running_reqs > 0:
+                status_array[0] = self.stats.num_running_reqs
+            if self.stats.num_queue_reqs > 0:
+                status_array[1] = self.stats.num_queue_reqs
 
     @DynamicGradMode()
     def event_loop_pp(self):
