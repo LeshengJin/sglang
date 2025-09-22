@@ -537,7 +537,7 @@ class OpenAIServingChat(OpenAIServingBase):
                     if reasoning_text:
                         choice_data = ChatCompletionResponseStreamChoice(
                             index=index,
-                            delta=DeltaMessage(reasoning_content=reasoning_text),
+                            delta=DeltaMessage(role="assistant", reasoning_content=reasoning_text),
                             finish_reason=None,
                         )
                         chunk = ChatCompletionStreamResponse(
@@ -579,7 +579,7 @@ class OpenAIServingChat(OpenAIServingBase):
                     if delta:
                         choice_data = ChatCompletionResponseStreamChoice(
                             index=index,
-                            delta=DeltaMessage(content=delta),
+                            delta=DeltaMessage(role="assistant", content=delta),
                             finish_reason=None,
                             matched_stop=None,
                             logprobs=choice_logprobs,
@@ -609,7 +609,7 @@ class OpenAIServingChat(OpenAIServingBase):
                     choices=[
                         ChatCompletionResponseStreamChoice(
                             index=idx,
-                            delta=DeltaMessage(),
+                            delta=DeltaMessage(role="assistant"),
                             finish_reason=final_finish_reason,
                             matched_stop=(
                                 finish_reason_data["matched"]
@@ -639,7 +639,7 @@ class OpenAIServingChat(OpenAIServingBase):
                                 ChatCompletionResponseStreamChoice(
                                     index=index,
                                     delta=DeltaMessage(
-                                        hidden_states=last_token_hidden_states
+                                        role="assistant", hidden_states=last_token_hidden_states
                                     ),
                                     finish_reason=None,  # Hidden states don't need finish_reason
                                 )
@@ -964,7 +964,7 @@ class OpenAIServingChat(OpenAIServingBase):
         if normal_text:
             choice_data = ChatCompletionResponseStreamChoice(
                 index=index,
-                delta=DeltaMessage(content=normal_text),
+                delta=DeltaMessage(role="assistant", content=normal_text),
                 finish_reason=None,
             )
             chunk = ChatCompletionStreamResponse(
@@ -1005,7 +1005,7 @@ class OpenAIServingChat(OpenAIServingBase):
 
             choice_data = ChatCompletionResponseStreamChoice(
                 index=index,
-                delta=DeltaMessage(tool_calls=[tool_call]),
+                delta=DeltaMessage(role="assistant", tool_calls=[tool_call]),
                 finish_reason=None,
             )
             chunk = ChatCompletionStreamResponse(
@@ -1073,7 +1073,7 @@ class OpenAIServingChat(OpenAIServingBase):
 
             choice_data = ChatCompletionResponseStreamChoice(
                 index=index,
-                delta=DeltaMessage(tool_calls=[tool_call]),
+                delta=DeltaMessage(role="assistant", tool_calls=[tool_call]),
                 finish_reason=None,  # Don't send finish_reason with this chunk
             )
 
