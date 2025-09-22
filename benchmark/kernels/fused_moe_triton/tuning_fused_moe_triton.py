@@ -411,7 +411,7 @@ def main(args: argparse.Namespace):
         topk = config.num_experts_per_tok
         intermediate_size = config.intermediate_size
         shard_intermediate_size = 2 * intermediate_size // args.tp_size
-    elif config.architectures[0] in ["Qwen2MoeForCausalLM", "Qwen3MoeForCausalLM"]:
+    elif config.architectures[0] in ["Qwen2MoeForCausalLM", "Qwen3MoeForCausalLM", "Qwen3NextForCausalLM"]:
         E = config.num_experts
         topk = config.num_experts_per_tok
         intermediate_size = config.moe_intermediate_size
@@ -482,19 +482,19 @@ def main(args: argparse.Namespace):
             4,
             8,
             16,
-            24,
-            32,
-            48,
-            64,
-            96,
-            128,
-            256,
-            512,
-            1024,
-            1536,
-            2048,
-            3072,
-            4096,
+            # 24,
+            # 32,
+            # 48,
+            # 64,
+            # 96,
+            # 128,
+            # 256,
+            # 512,
+            # 1024,
+            # 1536,
+            # 2048,
+            # 3072,
+            # 4096,
         ]
     else:
         batch_sizes = [args.batch_size]
